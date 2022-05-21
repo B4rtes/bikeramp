@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TripsModule } from './trips/trips.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { AppService } from './app.service';
       database: process.env.POSTGRES_DB,
       entities: [],
       synchronize: true, // Only for development purpose
-    })
+    }),
+    TripsModule
   ],
   controllers: [AppController],
   providers: [AppService],
