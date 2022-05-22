@@ -1,4 +1,4 @@
-import { IsDate, IsDecimal, IsNotEmpty, IsString } from "class-validator";
+import { IsDateString, IsDecimal, IsNotEmpty, IsString } from "class-validator";
 
 
 export class TripDto {
@@ -13,6 +13,6 @@ export class TripDto {
   @IsDecimal()
   price: number;
 
-  @IsDate()
+  @IsDateString()
   date: Date;
 }

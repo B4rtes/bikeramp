@@ -13,7 +13,7 @@ class Trip {
   @Column({
     type: "varchar"
   })
-  public end_address: string;
+  public destination_address: string;
 
   @Column({
     type: "float"
