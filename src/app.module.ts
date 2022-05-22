@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TripsModule } from './trips/trips.module';
 import { GeocodingModule } from './geocoding/geocoding.module';
+import { StatsModule } from './stats/stats.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { GeocodingModule } from './geocoding/geocoding.module';
       synchronize: true, // Only for development purpose
     }),
     TripsModule,
-    GeocodingModule
+    GeocodingModule,
+    StatsModule
   ],
   controllers: [AppController],
   providers: [AppService],
