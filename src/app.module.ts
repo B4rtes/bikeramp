@@ -4,11 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TripsModule } from './trips/trips.module';
+import { GeocodingModule } from './geocoding/geocoding.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env'
+      envFilePath: '.env',
+      isGlobal: true,
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -17,10 +19,11 @@ import { TripsModule } from './trips/trips.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      entities: [],
+      entities: [__dirname + '/../**/*.entity.{js, ts}'],
       synchronize: true, // Only for development purpose
     }),
-    TripsModule
+    TripsModule,
+    GeocodingModule
   ],
   controllers: [AppController],
   providers: [AppService],
