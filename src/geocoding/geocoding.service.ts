@@ -1,9 +1,12 @@
 import * as NodeGeocoder from 'node-geocoder';
 import { getDistance as calculateDistance } from 'geolib';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class GeocodingService {
+
+  private readonly logger = new Logger(GeocodingService.name);
+
   async getDistance(startAddress: string, destinationAddress: string) {
     const geocoder = NodeGeocoder({
       provider: "openstreetmap",
@@ -12,6 +15,15 @@ export class GeocodingService {
     try {
       const [startCoordinates] = await geocoder.geocode(startAddress);
       const [destinationCoordinates] = await geocoder.geocode(destinationAddress);
+
+      if (!startCoordinates) {
+        throw new Error('Start address is not valid');
+      }
+
+      if (!destinationCoordinates) {
+        throw new Error('Destination address is not valid');
+      }
+
       const distance = calculateDistance(
         { latitude: startCoordinates.latitude, longitude: startCoordinates.longitude },
         { latitude: destinationCoordinates.latitude, longitude: destinationCoordinates.longitude },
@@ -19,12 +31,8 @@ export class GeocodingService {
 
       return distance;
     } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        console.log(error.stack);
-        return;
-      }
-      console.log(error);
+      this.logger.error(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
 
   }

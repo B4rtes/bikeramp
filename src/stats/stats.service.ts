@@ -1,6 +1,6 @@
 import { getWeekBoundaries, formatPrice, convertMeterToKm, formatDate } from './../helper';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import Trip from 'src/trips/trip.entity';
 import { Repository } from 'typeorm';
 
@@ -18,6 +18,8 @@ type MonthStats = {
 
 @Injectable()
 export class StatsService {
+  private readonly logger = new Logger(StatsService.name);
+
   constructor(
     @InjectRepository(Trip)
     private readonly tripRepo: Repository<Trip>
@@ -31,6 +33,8 @@ export class StatsService {
       .addSelect(`SUM(trip.distance)`, 'total_distance')
       .where(`trip.date BETWEEN '${startDate.toDateString()}' AND '${endDate.toDateString()}'`)
       .getRawOne();
+
+    this.logger.log(`Weekly stats ${JSON.stringify(stat)}`);
 
     return {
       total_price: formatPrice(stat.total_price),

@@ -1,5 +1,5 @@
 import { GeocodingService } from './../geocoding/geocoding.service';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TripDto } from './dto/trip.dto';
@@ -7,6 +7,8 @@ import Trip from './trip.entity';
 
 @Injectable()
 export class TripsService {
+
+  private readonly logger = new Logger(TripsService.name);
 
   constructor(
     @InjectRepository(Trip)
@@ -21,6 +23,7 @@ export class TripsService {
 
     try {
       const distance = await this.geocodingService.getDistance(start_address, destination_address);
+      this.logger.log(`Distance value: ${distance}`);
 
       return this.tripRepo.save({
         start_address,
@@ -30,13 +33,8 @@ export class TripsService {
         distance
       });
     } catch (error) {
-      if (error instanceof Error) {
-        console.log(error.message);
-        console.log(error.stack);
-        return;
-      }
-
-      console.log(error);
+      this.logger.error(error);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
 
 
