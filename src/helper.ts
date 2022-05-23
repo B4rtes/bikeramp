@@ -24,3 +24,23 @@ export const formatPrice = (price: string) => {
   const currency = 'PLN';
   return `${price}${currency}`;
 };
+
+const getOrdinalNumber = (number: number) => {
+  const defaultEnding = 'th';
+  const endNumber = number % 10;
+  const ordinal = (number > 10 && number < 14) ? defaultEnding : {
+    1: 'st',
+    2: 'nd',
+    3: 'rd'
+  }[endNumber] || defaultEnding;
+
+  return `${number}${ordinal}`;
+};
+
+export const formatDate = (dateValue: string) => {
+  const date = new Date(dateValue);
+  const monthName = date.toLocaleString('default', { month: 'long' });
+  const ordinalNumber = getOrdinalNumber(date.getDate());
+
+  return `${monthName}, ${ordinalNumber}`;
+};

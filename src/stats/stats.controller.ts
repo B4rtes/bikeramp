@@ -12,6 +12,6 @@ export class StatsController {
 
   @Get('monthly')
   async getMonthlyStats() {
-    // TODO: Implement
+    return this.statsService.getMonthlyStats();
   }
 }
