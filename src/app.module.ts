@@ -10,7 +10,7 @@ import { StatsModule } from './stats/stats.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath: ['.env', '.template.env'],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({

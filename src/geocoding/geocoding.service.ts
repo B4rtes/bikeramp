@@ -17,11 +17,11 @@ export class GeocodingService {
       const [destinationCoordinates] = await geocoder.geocode(destinationAddress);
 
       if (!startCoordinates) {
-        throw new Error('Start address is not valid');
+        throw new Error('Start address data is not found');
       }
 
       if (!destinationCoordinates) {
-        throw new Error('Destination address is not valid');
+        throw new Error('Destination address data is not found');
       }
 
       const distance = calculateDistance(

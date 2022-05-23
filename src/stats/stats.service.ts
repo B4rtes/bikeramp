@@ -1,20 +1,11 @@
+import { WeekStats, MonthStats } from './statTypes';
 import { getWeekBoundaries, formatPrice, convertMeterToKm, formatDate } from './../helper';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 import Trip from 'src/trips/trip.entity';
 import { Repository } from 'typeorm';
 
-type WeekStats = {
-  total_price: string;
-  total_distance: string;
-};
 
-type MonthStats = {
-  date: string;
-  total_distance: string;
-  avg_ride: string;
-  avg_price: string;
-};
 
 @Injectable()
 export class StatsService {
@@ -25,7 +16,7 @@ export class StatsService {
     private readonly tripRepo: Repository<Trip>
   ) { }
 
-  async getWeeklyStats() {
+  async getWeeklyStats(): Promise<WeekStats> {
     const { startDate, endDate } = getWeekBoundaries();
 
     const stat: WeekStats = await this.tripRepo.createQueryBuilder('trip')
